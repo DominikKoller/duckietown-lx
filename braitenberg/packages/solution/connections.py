@@ -5,12 +5,12 @@ import numpy as np
 attraction_top = 1
 attraction_bottom = 0.5
 repulsion_top = 0.5
-repulsion_bottom = 1
+repulsion_bottom = 0.8
 
 
 repulsion_bottom_min = 0.2
 
-top_bottom_cutoff = 0.45
+top_bottom_cutoff = 0.42
 
 left_bias = 0.5
 
