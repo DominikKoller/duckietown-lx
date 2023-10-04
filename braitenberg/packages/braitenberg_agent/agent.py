@@ -25,8 +25,8 @@ from solution.preprocessing import preprocess
 # TODO edit this Config class ! Play with different gain and const values
 @dataclass
 class BraitenbergAgentConfig:
-    gain: float = 0.9
-    const: float = 0.0
+    gain: float = 0.2
+    const: float = 0.55 * 0.85
 
 
 class BraitenbergAgent:
@@ -77,26 +77,30 @@ class BraitenbergAgent:
         # let's take only the intensity of RGB
         P = preprocess(self.rgb)
         # now we just compute the activation of our sensors
-        l = float(np.sum(P * self.left))
-        r = float(np.sum(P * self.right))
+        l = float(np.mean(P * self.left))
+        r = float(np.mean(P * self.right))
 
         # These are big numbers -- we want to normalize them.
         # We normalize them using the history
 
         # first, we remember the high/low of these raw signals
-        self.l_max = max(l, self.l_max)
-        self.r_max = max(r, self.r_max)
-        self.l_min = min(l, self.l_min)
-        self.r_min = min(r, self.r_min)
+        #self.l_max = max(l, self.l_max)
+        #self.r_max = max(r, self.r_max)
+        #self.l_min = min(l, self.l_min)
+        #self.r_min = min(r, self.r_min)
 
         # now rescale from 0 to 1
-        ls = rescale(l, self.l_min, self.l_max)
-        rs = rescale(r, self.r_min, self.r_max)
+        #ls = rescale(l, self.l_min, self.l_max)
+        #rs = rescale(r, self.r_min, self.r_max)
 
         gain = self.config.gain
         const = self.config.const
-        pwm_left = const + ls * gain
-        pwm_right = const + rs * gain
+        pwm_left = const + l * gain
+        pwm_right = const + r * gain
+
+        # clamp between -1 and 1
+        pwm_left = max(-1.0, min(1.0, pwm_left))
+        pwm_right = max(-1.0, min(1.0, pwm_right))
 
         return pwm_left, pwm_right
 
