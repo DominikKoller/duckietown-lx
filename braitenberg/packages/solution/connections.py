@@ -2,10 +2,10 @@ from typing import Tuple
 
 import numpy as np
 
-horizon = 0.13
+horizon = 0.09
 repulsion = 0.3
 repulsion_size_top = 0
-repulsion_size_bottom = 0.5
+repulsion_size_bottom = 0.55
 
 def get_motor_left_matrix(shape: Tuple[int, int]) -> np.ndarray:
     res = np.zeros(shape=shape, dtype="float32")
