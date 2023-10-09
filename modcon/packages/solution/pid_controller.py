@@ -29,11 +29,13 @@ def PIDController(
 
     e = theta_ref - theta_hat
 
-    k_p = 2.5
+    k_p = 10
     k_i = 1.0
     k_d = 0.2
 
     e_int = prev_int + e * delta_t
+    e_int = max(min(e_int,2),-2)
+
     e_der = (e-prev_e) / delta_t
     
     omega = k_p * e + k_i * e_int + k_d * e_der
