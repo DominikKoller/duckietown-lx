@@ -27,7 +27,15 @@ def get_steer_matrix_right_lane_markings(shape: Tuple[int, int]) -> np.ndarray:
                              using the masked right lane markings (numpy.ndarray)
     """
 
-    return gradient_array(shape, from_=1, to=0, angle=0)
+    rows, cols = shape
+    gradient_start_col = cols // 2
+    combined = np.zeros(shape)
+    
+    gradient_shape = (rows, cols - gradient_start_col)
+    gradient_part = gradient_array(gradient_shape, from_=1, to=0, angle=0)
+    
+    combined[:, gradient_start_col:] = gradient_part
+    return combined
 
 
 def detect_lane_markings(image: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
@@ -41,11 +49,11 @@ def detect_lane_markings(image: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
 
     imghsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    tolerance = np.array([10, 10, 10])
+    tolerance = np.array([20, 20, 20])
     white_lower_hsv = np.array([0, 0, 166]) - tolerance
     white_upper_hsv = np.array([179, 25, 189]) + tolerance
     yellow_lower_hsv = np.array([26, 84, 176]) - tolerance
-    yellow_upper_hsv = np.array([29, 171, 189]) + tolerance
+    yellow_upper_hsv = np.array([29, 240, 200]) + tolerance
 
     mask_white = cv2.inRange(imghsv, white_lower_hsv, white_upper_hsv)
     mask_yellow = cv2.inRange(imghsv, yellow_lower_hsv, yellow_upper_hsv)
