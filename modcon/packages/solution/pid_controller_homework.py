@@ -33,16 +33,21 @@ def PIDController(
         gains = yaml.full_load(f)
         f.close()
     
-    kp = gains['kp']
-    kd = gains['kd']
-    ki = gains['ki']
+    k_p = gains['kp']
+    k_d = gains['kd']
+    k_i = gains['ki']
 
     # ------------- DEFINE YOUR PID FUNCTION BELOW ---------
 
     # These are random values, replace with your implementation of a PID controller in here
-    omega = np.random.uniform(-8.0, 8.0)
-    e = np.random.random()
-    e_int = np.random.random()
-    # ---
+
+    e = y_ref - y_hat
     
+    e_int = prev_int_y + e * delta_t
+    e_int = max(min(e_int,2),-2)
+
+    e_der = (e-prev_e_y) / delta_t
+    
+    omega = k_p * e + k_i * e_int + k_d * e_der
+
     return v_0, omega, e, e_int
