@@ -3,6 +3,9 @@ from typing import Tuple
 import numpy as np
 import cv2
 
+gain = 0.06
+gain_yellow = 1.6
+far_intensity = 0.0
 
 def get_steer_matrix_left_lane_markings(shape: Tuple[int, int]) -> np.ndarray:
     """
@@ -14,11 +17,11 @@ def get_steer_matrix_left_lane_markings(shape: Tuple[int, int]) -> np.ndarray:
                             using the masked left lane markings (numpy.ndarray)
     """
 
-    result = gradient_array(shape, from_=-0.5, to=-1, angle=180)
+    result = gradient_array(shape, from_=-0.5, to=-1, angle=0)
 
-    result = result * gradient_array(shape, from_=0.5, to=1, angle=90)
+    result = result * gradient_array(shape, from_=far_intensity, to=1, angle=90)
 
-    return result
+    return result * gain * gain_yellow
 
 
 def get_steer_matrix_right_lane_markings(shape: Tuple[int, int]) -> np.ndarray:
@@ -40,9 +43,9 @@ def get_steer_matrix_right_lane_markings(shape: Tuple[int, int]) -> np.ndarray:
     
     result[:, gradient_start_col:] = gradient_part
 
-    result = result * gradient_array(shape, from_=0.5, to=1, angle=90)
+    result = result * gradient_array(shape, from_=far_intensity, to=1, angle=90)
 
-    return result
+    return result * gain
 
 
 def detect_lane_markings(image: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
