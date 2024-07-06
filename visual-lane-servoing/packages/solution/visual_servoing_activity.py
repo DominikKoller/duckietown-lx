@@ -53,8 +53,8 @@ def detect_lane_markings(image: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     Args:
         image: An image from the robot's camera in the BGR color space (numpy.ndarray)
     Return:
-        left_masked_img:   Masked image for the dashed-yellow line (numpy.ndarray)
-        right_masked_img:  Masked image for the solid-white line (numpy.ndarray)
+        mask_left_edge:   Masked image for the dashed-yellow line (numpy.ndarray)
+        mask_right_edge:  Masked image for the solid-white line (numpy.ndarray)
     """
 
     imghsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
